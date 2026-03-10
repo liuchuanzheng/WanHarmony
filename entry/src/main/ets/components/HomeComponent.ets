@@ -2,6 +2,7 @@ import homeViewModel from "../viewmodel/HomeViewModel"
 import { Article } from "../net/bean/ArticleBeans";
 import { ArticleItemComponent } from "./ArticleItemComponnet";
 import { PullToRefresh, PullToRefreshType } from '@ohos/pulltorefresh/index';
+import { Banner } from "../net/bean/BannerBean";
 
 /**
  * 首页
@@ -12,9 +13,10 @@ export struct HomeComponent {
   private articleList: Article[] = []
   @State
   pageNum: number = 0; //分页page
-  private scroller: Scroller = new Scroller(); // 需绑定列表或宫格组件
   @State
   refreshing: boolean = false;
+  @State
+  bannerList: Banner[] = []
 
   aboutToAppear(): void {
     Promise.all([homeViewModel.getArticleList(0), homeViewModel.getTopArticleList(), homeViewModel.getBannerList()])
@@ -26,6 +28,7 @@ export struct HomeComponent {
           item.isTop = true
         })
         this.articleList = topArticleList.concat(articleList)
+        this.bannerList = bannerList
       })
     // homeViewModel.getArticleList(0).then(res => {
     //   this.articleList = this.articleList.concat(res.datas)
@@ -47,11 +50,45 @@ export struct HomeComponent {
   @Builder
   listViewBuilder() {
     List({ space: 0 }) {
+      this.bannerBuilder()
       ForEach(this.articleList, (item: Article, index) => {
         ListItem() {
           ArticleItemComponent({ article: item })
         }
       })
+    }
+  }
+  @Builder
+  bannerBuilder() {
+    if (this.bannerList.length > 0) {
+      ListItem() {
+        Column() {
+          Swiper() {
+            ForEach(this.bannerList, (banner: Banner) => {
+              Image(banner.imagePath)
+                .width('100%')
+                .height(200)
+                .objectFit(ImageFit.Cover)
+                .borderRadius(8)
+                .margin({ left: 12, right: 12, top: 8, bottom: 8 })
+                .onClick(() => {
+                  // 点击banner跳转逻辑
+                  console.log('点击banner:', banner.title)
+                })
+                .border({ width: 1, color: Color.Red})
+            })
+          }
+          .width('100%')
+          .height(220)
+          .indicator(true)
+          .loop(true)
+          .autoPlay(true)
+          .interval(3000)
+          .duration(500)
+          .prevMargin(25)
+          .nextMargin(25)
+        }
+      }
     }
   }
 
@@ -84,6 +121,7 @@ export struct HomeComponent {
                   item.isTop = true
                 })
                 this.articleList = topArticleList.concat(articleList)
+                this.bannerList = bannerList
                 resolve('刷新成功')
               })
 
@@ -108,7 +146,6 @@ export struct HomeComponent {
     }
     .width('100%')
     .height('100%')
-    .backgroundColor(Color.Red)
     .justifyContent(FlexAlign.Center)
 
   }

@@ -3,7 +3,7 @@ import { router } from '@kit.ArkUI'
 @Entry
 @Component
 struct SplashPage {
-  @State seconds: number = 3
+  @State seconds: number = 1
   timerId: number = -1
 
   build() {
