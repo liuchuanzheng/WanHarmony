@@ -13,6 +13,7 @@ struct MainPage {
 
   build() {
     Column() {
+
       Tabs({ barPosition: BarPosition.End }) {
         TabContent() {
           HomeComponent()
@@ -46,7 +47,7 @@ struct MainPage {
       .scrollable(false)
       .backgroundColor('#F1F3F5')
       .expandSafeArea([SafeAreaType.SYSTEM],
-        [SafeAreaEdge.BOTTOM, SafeAreaEdge.TOP])//顶部底部安全区域也同色，避免底部导航栏和页面底部不同颜色
+        [SafeAreaEdge.BOTTOM])//顶部底部安全区域也同色，避免底部导航栏和页面底部不同颜色
     }
     .width('100%')
     .height('100%')
