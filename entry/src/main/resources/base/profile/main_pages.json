@@ -3,6 +3,7 @@
     "pages/SplashPage",
     "pages/MainPage",
     "pages/LoginOrRegisterPage",
-    "pages/SettingPage"
+    "pages/SettingPage",
+    "pages/TreeTabPage"
   ]
 }

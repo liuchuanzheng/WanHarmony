@@ -3,6 +3,7 @@ import { Banner } from "./bean/BannerBean";
 import BaseResponseBean from "./bean/BaseResponseBean";
 import { MsgData } from "./bean/MsgBean";
 import { ProjectItem } from "./bean/ProjectBean";
+import { TreeArticle, TreeItem } from "./bean/TreeBean";
 import { UserData, UserInfo } from "./bean/UserInfoBean";
 import { NetConstant } from "./NetConstant";
 import { netUtil } from "./NetUtil";
@@ -166,6 +167,36 @@ class NetService {
     if (response.errorCode == NetConstant.BUSINESS_SUCCESS_CODE) {
       // 业务成功
       return response.data as ArticleList;
+    } else {
+      console.log(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
+      // 非成功条件，抛出异常
+      throw new Error(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
+    }
+  }
+
+  async getTree(): Promise<TreeItem[]> {
+    let url = `${NetConstant.BASE_URL}/tree/json`
+    console.log('业务网络请求', `获取体系分类（一级，二级）`)
+    console.log('业务网络请求', `${url}`)
+    let response = await netUtil.get(url)
+    if (response.errorCode == NetConstant.BUSINESS_SUCCESS_CODE) {
+      // 业务成功
+      return response.data as TreeItem[];
+    } else {
+      console.log(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
+      // 非成功条件，抛出异常
+      throw new Error(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
+    }
+  }
+
+  async getTreeCidList(pageNum: number, cid: number): Promise<TreeArticle> {
+    let url = `${NetConstant.BASE_URL}/article/list/${pageNum}/json?cid=${cid}`
+    console.log('业务网络请求', `二级体系分类下的文章`)
+    console.log('业务网络请求', `${url}`)
+    let response = await netUtil.get(url)
+    if (response.errorCode == NetConstant.BUSINESS_SUCCESS_CODE) {
+      // 业务成功
+      return response.data as TreeArticle;
     } else {
       console.log(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
       // 非成功条件，抛出异常
