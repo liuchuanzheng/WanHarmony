@@ -2,6 +2,7 @@ import { Article, ArticleList } from "./bean/ArticleBeans";
 import { Banner } from "./bean/BannerBean";
 import BaseResponseBean from "./bean/BaseResponseBean";
 import { MsgData } from "./bean/MsgBean";
+import { ProjectItem } from "./bean/ProjectBean";
 import { UserData, UserInfo } from "./bean/UserInfoBean";
 import { NetConstant } from "./NetConstant";
 import { netUtil } from "./NetUtil";
@@ -109,9 +110,9 @@ class NetService {
     let response = await netUtil.get(url)
     if (response.errorCode == NetConstant.BUSINESS_SUCCESS_CODE) {
       // 业务成功
-      if (typeof response.data === 'number') {//没有数据时返回0，真是奇葩
+      if (typeof response.data === 'number') { //没有数据时返回0，真是奇葩
         return new MsgData();
-      }else{
+      } else {
         return response.data as MsgData;
       }
     } else {
@@ -130,11 +131,41 @@ class NetService {
       // 业务成功
       if (typeof response.data === 'number') {
         return new MsgData();
-      }else{
+      } else {
         return response.data as MsgData;
       }
 
 
+    } else {
+      console.log(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
+      // 非成功条件，抛出异常
+      throw new Error(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
+    }
+  }
+
+  async getProjectTree(): Promise<ProjectItem[]> {
+    let url = `${NetConstant.BASE_URL}/project/tree/json`
+    console.log('业务网络请求', `项目分类标签列表`)
+    console.log('业务网络请求', `${url}`)
+    let response = await netUtil.get(url)
+    if (response.errorCode == NetConstant.BUSINESS_SUCCESS_CODE) {
+      // 业务成功
+      return response.data as ProjectItem[];
+    } else {
+      console.log(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
+      // 非成功条件，抛出异常
+      throw new Error(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
+    }
+  }
+
+  async getProjectList(pageNum: number, cid: number): Promise<ArticleList> {
+    let url = `${NetConstant.BASE_URL}/project/list/${pageNum}/json?cid=${cid}`
+    console.log('业务网络请求', `项目标签下的具体列表`)
+    console.log('业务网络请求', `${url}`)
+    let response = await netUtil.get(url)
+    if (response.errorCode == NetConstant.BUSINESS_SUCCESS_CODE) {
+      // 业务成功
+      return response.data as ArticleList;
     } else {
       console.log(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
       // 非成功条件，抛出异常
