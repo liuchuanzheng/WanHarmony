@@ -1,3 +1,5 @@
+import { router } from "@kit.ArkUI";
+
 interface FuncInterface {
   'name': string;
   'backgroundColor': Color;
@@ -81,6 +83,7 @@ export struct MeComponent {
         .height(80)
         .onClick(() => {
           //点击头像区域
+          router.push({ url: 'pages/LoginOrRegisterPage'})
         })
 
         Flex({ justifyContent: FlexAlign.SpaceBetween }) {
