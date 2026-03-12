@@ -195,6 +195,9 @@ export struct MeComponent {
       Image($r('app.media.ic_setting'))
         .width(30)
         .height(30)
+        .onClick(()=>{
+          router.push({ url: 'pages/SettingPage' })
+        })
     }
     .width('100%')
     .height(50)

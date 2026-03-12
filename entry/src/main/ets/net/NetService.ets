@@ -84,6 +84,20 @@ class NetService {
       throw new Error(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
     }
   }
+  async logout(): Promise<BaseResponseBean> {
+    let url = `${NetConstant.BASE_URL}/user/logout/json`
+    console.log('业务网络请求', `退出登录`)
+    console.log('业务网络请求', `${url}`)
+    let response = await netUtil.get(url)
+    if (response.errorCode == NetConstant.BUSINESS_SUCCESS_CODE) {
+      // 业务成功
+      return response;
+    } else {
+      console.log(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
+      // 非成功条件，抛出异常
+      throw new Error(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
+    }
+  }
 }
 
 let netService = new NetService();
