@@ -8,7 +8,7 @@ import { NetConstant } from "./NetConstant";
  * 网络请求工具类,封装get和post请求.尽量和业务无关
  */
 class NetUtil {
-  async get(url: string) {
+  async get(url: string, params?: object) {
     return await this.realNet(url, http.RequestMethod.GET)
   }
 

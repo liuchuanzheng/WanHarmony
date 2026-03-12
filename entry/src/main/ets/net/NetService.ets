@@ -1,7 +1,7 @@
 import { Article, ArticleList } from "./bean/ArticleBeans";
 import { Banner } from "./bean/BannerBean";
 import BaseResponseBean from "./bean/BaseResponseBean";
-import { UserInfo } from "./bean/UserInfoBean";
+import { UserData, UserInfo } from "./bean/UserInfoBean";
 import { NetConstant } from "./NetConstant";
 import { netUtil } from "./NetUtil";
 
@@ -59,10 +59,25 @@ class NetService {
     url = netUtil.buildUrl(url, Object({ username, password }))
     console.log('业务网络请求', `登录${username} ${password}`)
     console.log('业务网络请求', `${url}`)
-    let response = await netUtil.post(url, Object({ username, password }))
+    let response = await netUtil.post(url)
     if (response.errorCode == NetConstant.BUSINESS_SUCCESS_CODE) {
       // 业务成功
       return response.data as UserInfo;
+    } else {
+      console.log(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
+      // 非成功条件，抛出异常
+      throw new Error(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
+    }
+  }
+  async getUserInfo(): Promise<UserData> {
+    //不需要参数，因为在cookie中携带了用户凭证，是登录后返回的，
+    let url = `${NetConstant.BASE_URL}/user/lg/userinfo/json`
+    console.log('业务网络请求', `获取用户信息`)
+    console.log('业务网络请求', `${url}`)
+    let response = await netUtil.get(url)
+    if (response.errorCode == NetConstant.BUSINESS_SUCCESS_CODE) {
+      // 业务成功
+      return response.data as UserData;
     } else {
       console.log(`业务失败：errorCode=${response.errorCode}, errorMsg=${response.errorMsg}`)
       // 非成功条件，抛出异常

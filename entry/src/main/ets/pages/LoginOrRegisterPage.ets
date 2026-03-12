@@ -5,8 +5,8 @@ import loginOrRegisterViewModel from '../viewmodel/LoginOrRegisterViewModel';
 @Component
 struct LoginOrRegisterPage {
   @State isRegister: boolean = false;
-  @State inputUserName: string = '';
-  @State inputPassword: string = '';
+  @State inputUserName: string = '18501231486';
+  @State inputPassword: string = '004876';
   @State inputRepassword: string = '';
   @State isShowProgress: boolean = false;
 

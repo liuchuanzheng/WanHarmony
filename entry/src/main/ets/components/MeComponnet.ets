@@ -1,4 +1,7 @@
 import { router } from "@kit.ArkUI";
+import { UserData } from "../net/bean/UserInfoBean";
+import { isEmpty } from "../utils/Utils";
+import meViewModel from "../viewmodel/MeViewModel";
 
 interface FuncInterface {
   'name': string;
@@ -58,43 +61,74 @@ export struct MeComponent {
     },
     regularSize: [1, 1],
   }
+  @State userData: UserData = new UserData()
+
+  aboutToAppear(): void {
+    meViewModel.getUserInfo().then((res) => {
+      this.userData = res
+      console.log(`排名:${this.userData.coinInfo.rank}`)
+    })
+  }
 
   build() {
     Scroll() {
       Column() {
         this.ToolBarBuilder()
         Row() {
-          Image($r('app.media.ic_user'))
-            .margin({ left: 20 })
-            .size({ width: 60, height: 60 })
 
-          Text(`欢迎登陆`)
+          if (isEmpty(this.userData.userInfo.username)) {
+            Image($r('app.media.ic_user'))
+              .margin({ left: 20 })
+              .size({ width: 60, height: 60 })
+          }else {
+            Image('https://q9.itc.cn/q_70/images03/20250730/7e535ac6918d44c4a0ab740ed9aa349d.jpeg')
+              .margin({ left: 20 })
+              .size({ width: 60, height: 60 })
+          }
+
+          Text(!isEmpty(this.userData.userInfo.username) ? this.userData.userInfo.username : '欢迎登陆')
             .textAlign(TextAlign.Start)
             .maxLines(1)
             .fontSize(18)
             .margin({ left: 10, right: 10 })
             .layoutWeight(1)
-
-          Image($r('app.media.ic_arrow_right'))
-            .size({ width: 30, height: 30 })
+          if (isEmpty(this.userData.userInfo.username)) {
+            Image($r('app.media.ic_arrow_right'))
+              .size({ width: 30, height: 30 })
+          }
         }
         .alignItems(VerticalAlign.Center)
         .width('100%')
         .height(80)
         .onClick(() => {
           //点击头像区域
-          router.push({ url: 'pages/LoginOrRegisterPage'})
+          if (isEmpty(this.userData.userInfo.username)) {
+            router.push({ url: 'pages/LoginOrRegisterPage' })
+          }
         })
 
         Flex({ justifyContent: FlexAlign.SpaceBetween }) {
-          this.InfoItem('排名', '——', (): void => {
-          })
-          this.InfoItem('收藏', '——', (): void => {
-          })
-          this.InfoItem('等级', '——', (): void => {
-          })
-          this.InfoItem('积分', '——', (): void => {
-          })
+          //这样写才保证builder里的状态变量会刷新
+          if (isEmpty(this.userData.userInfo.username)){
+            this.InfoItem('排名', '——', (): void => {
+            })
+            this.InfoItem('收藏', '——', (): void => {
+            })
+            this.InfoItem('等级', '——', (): void => {
+            })
+            this.InfoItem('积分', '——', (): void => {
+            })
+          }else {
+            this.InfoItem('排名', `${this.userData.coinInfo.rank}`, (): void => {
+            })
+            this.InfoItem('收藏', `${this.userData.userInfo.collectIds.length}`, (): void => {
+            })
+            this.InfoItem('等级', `${this.userData.coinInfo.level}`, (): void => {
+            })
+            this.InfoItem('积分', `${this.userData.coinInfo.coinCount}`, (): void => {
+            })
+          }
+
         }.margin({ top: 20 })
 
         Column() {
@@ -128,7 +162,6 @@ export struct MeComponent {
       .justifyContent(FlexAlign.Start)
       .alignItems(HorizontalAlign.Start)
 
-
     }
     .scrollBar(BarState.Off)
     .scrollable(ScrollDirection.Vertical)
@@ -136,13 +169,13 @@ export struct MeComponent {
 
   }
 
-  @Builder
+  @Builder //builder中状态变量传参不会刷新
   InfoItem(title: string, content?: string, click?: () => void) {
     Column() {
       Text(title)
         .fontSize(18)
         .fontWeight(FontWeight.Bold)
-      Text(content)
+      Text(!isEmpty(content) ? content : '——')
         .margin({ top: 3 })
     }.flexGrow(1)
     .alignItems(HorizontalAlign.Center)
@@ -166,7 +199,7 @@ export struct MeComponent {
     .width('100%')
     .height(50)
     .justifyContent(FlexAlign.SpaceBetween)
-    .backgroundColor(Color.Blue)
+    .backgroundColor("#007DFF")
 
     // .expandSafeArea([SafeAreaType.SYSTEM],
     //   [SafeAreaEdge.BOTTOM, SafeAreaEdge.TOP])
