@@ -1,11 +1,21 @@
+import { MsgReadListComponent } from "./MsgReadListComponnet"
+import { MsgUnreadListComponent } from "./MsgUnreadListComponnet"
+
+@Preview
 @Component
 export struct MsgComponent {
   build() {
-    Column()
-      .width('100%')
-      .height('100%')
-      .backgroundColor(Color.Blue)
-      .justifyContent(FlexAlign.Center)
+    Tabs() {
+      TabContent() {
+        MsgReadListComponent()
+      }.tabBar("已读消息")
+
+      TabContent() {
+        MsgUnreadListComponent()
+      }.tabBar("未读消息")
+    }.onChange((index) => {
+
+    })
 
   }
 }
