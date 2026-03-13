@@ -4,6 +4,7 @@
     "pages/MainPage",
     "pages/LoginOrRegisterPage",
     "pages/SettingPage",
-    "pages/TreeTabPage"
+    "pages/TreeTabPage",
+    "pages/MyWebPage"
   ]
 }

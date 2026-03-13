@@ -1,5 +1,6 @@
 import { Article } from '../net/bean/ArticleBeans'
 import { isEmpty } from '../utils/Utils'
+import { router } from '@kit.ArkUI'
 
 @Preview
 @Component
@@ -115,5 +116,14 @@ export struct ArticleItemComponent {
     .borderWidth(0.5)
     .borderColor(Color.Gray)
     .backgroundColor('#FFF1F3F5')
+    .onClick(() => {
+      router.push({
+        url: 'pages/MyWebPage',
+        params: {
+          url: this.article.link,
+          title: this.article.title
+        }
+      })
+    })
   }
 }

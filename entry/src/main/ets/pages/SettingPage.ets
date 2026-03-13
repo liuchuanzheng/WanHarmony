@@ -1,4 +1,5 @@
 import { router } from '@kit.ArkUI';
+import { LogoutConfirmDialog } from '../dialog/LogoutConfirmDialog';
 import { cookieManager } from '../net/CookieManager';
 import settingViewModel from '../viewmodel/SettingViewModel';
 
@@ -7,7 +8,18 @@ import settingViewModel from '../viewmodel/SettingViewModel';
 struct SettingPage {
   @State message: string = 'Hello World';
   @State isLogin: boolean = false;
-
+  // 自定义退出登录弹窗控制器
+  logoutDialogController: CustomDialogController = new CustomDialogController({
+    builder: LogoutConfirmDialog({
+      onConfirm: () => {
+        this.logoutDialogController.close();
+        settingViewModel.logout();
+      },
+      onCancel: () => {
+        this.logoutDialogController.close();
+      }
+    })
+  })
   aboutToAppear(): void {
     this.isLogin = cookieManager.getCookieHeader().includes('login')
   }
@@ -40,7 +52,7 @@ struct SettingPage {
           .backgroundColor("#ffe9e7df")
           .margin({ bottom: 50 })
           .onClick(() => {
-            settingViewModel.logout()
+            this.logoutDialogController.open();
           })
       }
 
@@ -77,3 +89,4 @@ struct SettingPage {
     //   [SafeAreaEdge.BOTTOM, SafeAreaEdge.TOP])
   }
 }
+

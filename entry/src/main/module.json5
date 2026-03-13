@@ -15,9 +15,9 @@
         "name": "EntryAbility",
         "srcEntry": "./ets/entryability/EntryAbility.ets",
         "description": "$string:EntryAbility_desc",
-        "icon": "$media:ic_logo",
-        "label": "$string:EntryAbility_label",
-        "startWindowIcon": "$media:startIcon",
+        "icon": "$media:ic_logo",//会覆盖appScope中的icon字段
+        "label": "$string:EntryAbility_label",//它会覆盖appScope中的label字段
+        "startWindowIcon": "$media:ic_logo_total",//应用启动时的Window图标。故意设置的不一样，查看效果
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
         "skills": [

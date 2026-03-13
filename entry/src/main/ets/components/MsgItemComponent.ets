@@ -1,4 +1,5 @@
 import { MsgItem } from "../net/bean/MsgBean"
+import { router } from "@kit.ArkUI"
 
 @Preview
 @Component
@@ -63,5 +64,14 @@ export default struct MsgItemView {
     .backgroundColor("#F5F5F5")
     .borderWidth(5)
     .borderColor("#D3D3D3")
+    .onClick(() => {
+      router.push({
+        url: 'pages/MyWebPage',
+        params: {
+          url: this.msgItem.link,
+          title: this.msgItem.title
+        }
+      })
+    })
   }
 }
